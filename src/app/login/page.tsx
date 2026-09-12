@@ -77,10 +77,7 @@ export default function LoginPage() {
     <div className="relative flex min-h-screen items-center justify-center bg-[#023e8a] px-4 py-12 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background layer matching homepage */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#00b4d8] via-[#0077b6] to-[#03045e]" />
-      <div 
-        className="absolute inset-0 opacity-20 mix-blend-color-dodge"
-        style={{ backgroundImage: 'url(/images/map/ocean_bg.jpg)', backgroundSize: '800px', backgroundRepeat: 'repeat' }}
-      />
+      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/30 via-transparent to-transparent pointer-events-none" />
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-cyan-500/20 rounded-full blur-[150px] mix-blend-screen pointer-events-none -translate-y-1/2 translate-x-1/3" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-600/30 rounded-full blur-[150px] mix-blend-screen pointer-events-none translate-y-1/3 -translate-x-1/4" />
 

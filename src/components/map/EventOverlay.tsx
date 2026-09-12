@@ -8,7 +8,7 @@ import Image from 'next/image'
 
 function getEventTheme(title: string, stage: string) {
   const t = title.toLowerCase()
-  if (t.includes('hackathon') || t.includes('code clash')) {
+  if (t.includes('contest') || t.includes('code clash') || t.includes('qualifier') || t.includes('uncode')) {
     return { bg: 'bg-indigo-900', icon: <Terminal className="w-16 h-16 text-indigo-300 opacity-50" />, pattern: 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-800 via-indigo-950 to-black' }
   }
   if (t.includes('workshop')) {

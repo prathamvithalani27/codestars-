@@ -18,14 +18,7 @@ export type EventData = {
   status: string
 }
 
-const STAGES = [
-  { id: 'coding_camp', dbId: 'welcome_shoals', name: 'CodeStars Hub', image: '/images/map/welcome_shoals.jpg', p: 0.12, w: 900, purpose: 'Introduction to CodeStars' },
-  { id: 'practice_reef', dbId: 'tinkers_reef', name: 'Practice Grove', image: '/images/map/tinkers_reef.jpg', p: 0.28, w: 800, purpose: 'LEARN → PRACTICE → IMPROVE' },
-  { id: 'contest_arena', dbId: 'great_atoll', name: 'Mock Contest Arena', image: '/images/map/great_atoll.jpg', p: 0.44, w: 1000, purpose: 'Test your CP skills' },
-  { id: 'leaderboard_tower', dbId: 'arena_island', name: 'Code UnCode Qualifier', image: '/images/map/arena_island.jpg', p: 0.60, w: 900, purpose: 'PRELIMS' },
-  { id: 'upsolving_lab', dbId: 'hackers_hideaway', name: 'Regional Battleground', image: '/images/map/hackers_hideaway.jpg', p: 0.76, w: 900, purpose: 'REGIONALS' },
-  { id: 'champions_summit', dbId: 'summit_island', name: 'Grand Finale', image: '/images/map/summit_island.jpg', p: 0.92, w: 1000, purpose: 'GRAND FINAL' },
-]
+import { STAGES } from '@/lib/constants'
 
 function getStageIcon(stageId: string) {
   switch (stageId) {
@@ -160,21 +153,18 @@ export default function WorldMap({ events }: { events: EventData[] }) {
     setActiveStage(current)
   })
 
-  if (!mounted) return <div className="h-screen w-full bg-[#023e8a]" />
-
   return (
     <div ref={containerRef} style={{ height: `${WORLD_HEIGHT}px` }} className="relative bg-[#023e8a]">
-      {/* Sticky Viewport Container */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
+      {!mounted ? (
+        <div className="h-screen w-full bg-[#023e8a]" />
+      ) : (
+        <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
         
         {/* Deep Ocean Layer */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#00b4d8] via-[#0077b6] to-[#03045e]" />
         
-        {/* Ocean Textures and Particles */}
-        <div 
-          className="absolute inset-0 opacity-10 mix-blend-color-dodge"
-          style={{ backgroundImage: 'url(/images/map/ocean_bg.jpg)', backgroundSize: '800px', backgroundRepeat: 'repeat' }}
-        />
+        {/* Subtle Gradient Texture */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/30 via-transparent to-transparent pointer-events-none" />
         
         {/* The Scrollable World Layer */}
         <motion.div 
@@ -186,35 +176,7 @@ export default function WorldMap({ events }: { events: EventData[] }) {
             height: WORLD_HEIGHT
           }}
         >
-          {/* Hero Section */}
-          <div className="absolute top-[20vh] left-1/2 -translate-x-1/2 w-full max-w-5xl px-6 text-center z-20">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8">
-                <Sparkles className="text-yellow-400" size={16} />
-                <span className="text-white/90 text-sm font-bold tracking-widest uppercase">DJS CodeStars</span>
-              </div>
-              <h1 className="text-6xl sm:text-8xl md:text-9xl font-black text-white mb-6 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] tracking-tighter leading-[0.9]">
-                YOUR NEXT <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500">
-                  ADVENTURE
-                </span>
-              </h1>
-              <p className="text-xl sm:text-2xl text-blue-100 max-w-3xl mx-auto drop-shadow-lg font-medium leading-relaxed mb-16">
-                Explore workshops, hackathons, talks, competitions, and club events in a seamless, interactive world.
-              </p>
-              
-              <div className="flex flex-col items-center animate-bounce">
-                <span className="text-white/60 uppercase tracking-[0.3em] text-xs font-black mb-4">Scroll to Begin</span>
-                <div className="w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl flex items-center justify-center border border-white/20 shadow-[0_0_30px_rgba(0,180,216,0.3)]">
-                  <ChevronDown className="text-cyan-400" size={28} />
-                </div>
-              </div>
-            </motion.div>
-          </div>
+
 
           {/* Canonical Dotted Path */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 filter drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
@@ -288,7 +250,7 @@ export default function WorldMap({ events }: { events: EventData[] }) {
                     <div className={`w-12 h-1 bg-gradient-to-r ${getEventColor(stage.id)} rounded-full mb-3`} />
                     <h3 className="text-white font-black tracking-[0.2em] uppercase text-xl sm:text-2xl whitespace-nowrap">{stage.name}</h3>
                     <p className="text-zinc-400 text-xs font-bold tracking-widest mt-2 uppercase">{stage.purpose}</p>
-                    <p className="text-cyan-400/50 text-[10px] font-black tracking-widest mt-1 uppercase">{stageEvents.length} EVENT{stageEvents.length !== 1 ? 'S' : ''}</p>
+
                   </div>
                 </motion.div>
 
@@ -371,20 +333,7 @@ export default function WorldMap({ events }: { events: EventData[] }) {
 
         {/* Global UI Overlays */}
         
-        {/* Top Navbar */}
-        <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50 pointer-events-none">
-          <div className="pointer-events-auto flex items-center space-x-4 cursor-pointer hover:scale-105 transition-transform">
-            <div className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-2xl shadow-xl flex items-center justify-center border border-white/20">
-              <MapPin className="text-cyan-400" size={24} />
-            </div>
-            <span className="text-white font-black tracking-[0.2em] text-xl drop-shadow-md hidden sm:block">DJS CODESTARS</span>
-          </div>
-          
-          <div className="pointer-events-auto flex gap-4">
-            <a href="/login" className="px-6 py-3 bg-black/40 backdrop-blur-xl border border-white/20 text-white font-bold rounded-full hover:bg-white/20 transition-all shadow-xl text-sm uppercase tracking-wider">Login</a>
-            <a href="/dashboard" className="px-6 py-3 bg-white text-blue-900 font-black rounded-full hover:bg-blue-50 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] text-sm uppercase tracking-wider">Dashboard</a>
-          </div>
-        </div>
+
 
         {/* Journey Progress Indicator (Sidebar) */}
         <div className="absolute left-6 sm:left-10 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-40 pointer-events-none hidden lg:flex">
@@ -423,8 +372,8 @@ export default function WorldMap({ events }: { events: EventData[] }) {
             <EventOverlay event={selectedEvent} onClose={() => setSelectedEvent(null)} />
           )}
         </AnimatePresence>
-
       </div>
+      )}
     </div>
   )
 }

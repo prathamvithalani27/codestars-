@@ -36,34 +36,39 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/admin')
+  const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard')
+  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
 
-  if (isProtectedRoute && !user) {
+  if ((isDashboardRoute || isAdminRoute) && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  if (isAuthRoute && user) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
-  }
-
-  // Admin route protection
-  if (request.nextUrl.pathname.startsWith('/admin') && user) {
-    // We need to check if the user is an admin.
-    // For middleware, we fetch the profile.
+  // If user is logged in and accessing protected/auth routes, enforce strict role routing
+  if (user && (isAuthRoute || isDashboardRoute || isAdminRoute)) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.role !== 'admin') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/dashboard' // redirect unauthorized users to their dashboard
-      return NextResponse.redirect(url)
+    const role = profile?.role || 'student' // default to student/participant
+
+    if (role === 'admin') {
+      // Admins should only access /admin routes, not /dashboard or auth routes
+      if (isAuthRoute || isDashboardRoute) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/admin'
+        return NextResponse.redirect(url)
+      }
+    } else {
+      // Participants should only access /dashboard routes, not /admin or auth routes
+      if (isAuthRoute || isAdminRoute) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/dashboard'
+        return NextResponse.redirect(url)
+      }
     }
   }
 

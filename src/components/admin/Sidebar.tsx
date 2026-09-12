@@ -2,13 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Map, Calendar, Users, List, LogOut } from 'lucide-react'
+import { LayoutDashboard, Calendar, Users, List, LogOut, Settings, Target } from 'lucide-react'
+import Image from 'next/image'
+import { logout } from '@/app/actions/auth'
 
 const navigation = [
-  { name: 'Dashboard', href: '/admin', icon: Map },
-  { name: 'Events', href: '/admin/events', icon: Calendar },
-  { name: 'Registrations', href: '/admin/registrations', icon: List },
-  { name: 'Users', href: '/admin/users', icon: Users },
+  { name: 'Overview', href: '/admin', icon: LayoutDashboard },
+  { name: 'Participants', href: '/admin/participants', icon: Users },
 ]
 
 function classNames(...classes: string[]) {
@@ -19,14 +19,20 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
-      <div className="flex h-16 shrink-0 items-center">
-        <span className="text-xl font-bold text-white tracking-widest">ARCHIPELAGO</span>
+    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black/60 backdrop-blur-2xl border-r border-white/10 px-6 pb-4">
+      <div className="flex h-24 shrink-0 items-center gap-3 border-b border-white/10">
+        <div className="relative w-12 h-12 flex items-center justify-center bg-blue-900/50 rounded-xl border border-cyan-500/30">
+          <Image src="/images/logo.svg" alt="DJS CodeStars" fill className="object-contain p-2" />
+        </div>
+        <div>
+          <h2 className="text-white font-black text-xs tracking-widest uppercase">DJS CodeStars</h2>
+          <p className="text-cyan-400 text-[10px] font-bold tracking-widest uppercase mt-0.5">Control Center</p>
+        </div>
       </div>
-      <nav className="flex flex-1 flex-col">
+      <nav className="flex flex-1 flex-col mt-2">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
-            <ul role="list" className="-mx-2 space-y-1">
+            <ul role="list" className="-mx-2 space-y-2">
               {navigation.map((item) => {
                 const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))
                 return (
@@ -35,13 +41,16 @@ export function Sidebar() {
                       href={item.href}
                       className={classNames(
                         isActive
-                          ? 'bg-gray-800 text-white'
-                          : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                          ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/10 text-cyan-400 border border-cyan-500/30'
+                          : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent',
+                        'group flex gap-x-3 rounded-xl p-3 text-sm leading-6 font-bold transition-all'
                       )}
                     >
                       <item.icon
-                        className="h-6 w-6 shrink-0"
+                        className={classNames(
+                          isActive ? 'text-cyan-400' : 'text-zinc-400 group-hover:text-white',
+                          'h-5 w-5 shrink-0 transition-colors'
+                        )}
                         aria-hidden="true"
                       />
                       {item.name}
@@ -52,13 +61,12 @@ export function Sidebar() {
             </ul>
           </li>
           <li className="mt-auto">
-            <form action="/auth/signout" method="post">
-               {/* We will just use the standard signout route, or link to /login for now, later hook up logout action */}
+            <form action={logout}>
                <button
                 type="submit"
-                className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
+                className="group w-full -mx-2 flex gap-x-3 rounded-xl p-3 text-sm font-bold leading-6 text-zinc-400 hover:bg-red-500/10 hover:text-red-400 border border-transparent hover:border-red-500/30 transition-all"
               >
-                <LogOut className="h-6 w-6 shrink-0" aria-hidden="true" />
+                <LogOut className="h-5 w-5 shrink-0" aria-hidden="true" />
                 Sign out
               </button>
             </form>

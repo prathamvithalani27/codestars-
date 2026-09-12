@@ -40,6 +40,18 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.registrations ENABLE ROW LEVEL SECURITY;
 
+-- Admin Check Function (Bypasses RLS to prevent infinite recursion)
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+$$;
+
 -- Profiles RLS
 CREATE POLICY "Users can view their own profile." 
   ON public.profiles FOR SELECT 
@@ -47,7 +59,7 @@ CREATE POLICY "Users can view their own profile."
 
 CREATE POLICY "Admins can view all profiles." 
   ON public.profiles FOR SELECT 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 CREATE POLICY "Users can update their own profile." 
   ON public.profiles FOR UPDATE 
@@ -55,7 +67,7 @@ CREATE POLICY "Users can update their own profile."
 
 CREATE POLICY "Admins can update all profiles." 
   ON public.profiles FOR UPDATE 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 -- Events RLS
 CREATE POLICY "Anyone can view published events." 
@@ -64,19 +76,19 @@ CREATE POLICY "Anyone can view published events."
 
 CREATE POLICY "Admins can view all events." 
   ON public.events FOR SELECT 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 CREATE POLICY "Admins can insert events." 
   ON public.events FOR INSERT 
-  WITH CHECK (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  WITH CHECK (public.is_admin());
 
 CREATE POLICY "Admins can update events." 
   ON public.events FOR UPDATE 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 CREATE POLICY "Admins can delete events." 
   ON public.events FOR DELETE 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 -- Registrations RLS
 CREATE POLICY "Users can view their own registrations." 
@@ -85,7 +97,7 @@ CREATE POLICY "Users can view their own registrations."
 
 CREATE POLICY "Admins can view all registrations." 
   ON public.registrations FOR SELECT 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 CREATE POLICY "Users can insert their own registration." 
   ON public.registrations FOR INSERT 
@@ -97,11 +109,11 @@ CREATE POLICY "Users can update their own registration (to cancel)."
 
 CREATE POLICY "Admins can update all registrations." 
   ON public.registrations FOR UPDATE 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 CREATE POLICY "Admins can delete registrations." 
   ON public.registrations FOR DELETE 
-  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  USING (public.is_admin());
 
 -- Capacity Enforcement Function
 -- This function handles the registration process safely.

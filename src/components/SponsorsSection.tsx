@@ -16,42 +16,44 @@ export default function SponsorsSection() {
       </div>
 
       {/* Infinite scrolling marquee */}
-      <div className="relative z-10 w-full overflow-hidden flex">
+      <div className="relative z-10 w-full overflow-hidden">
         {/* Left/Right fading edges */}
         <div className="absolute top-0 bottom-0 left-0 w-32 bg-gradient-to-r from-[#023e8a] to-transparent z-20 pointer-events-none" />
         <div className="absolute top-0 bottom-0 right-0 w-32 bg-gradient-to-l from-[#023e8a] to-transparent z-20 pointer-events-none" />
         
-        {/* Track 1 */}
-        <div className="flex animate-marquee whitespace-nowrap items-center">
-          {OFFICIAL_SPONSORS.map((sponsor, idx) => (
-            <div key={idx} className="mx-8 sm:mx-16 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 hover:border-cyan-400/50 transition-colors cursor-pointer group">
-              <span className="text-white/40 font-black tracking-widest text-xl sm:text-2xl group-hover:text-cyan-400 transition-colors">
-                {sponsor}
-              </span>
-            </div>
-          ))}
-        </div>
-        {/* Track 2 (Clone for seamless looping) */}
-        <div className="flex animate-marquee whitespace-nowrap items-center" aria-hidden="true">
-          {OFFICIAL_SPONSORS.map((sponsor, idx) => (
-            <div key={`clone-${idx}`} className="mx-8 sm:mx-16 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 hover:border-cyan-400/50 transition-colors cursor-pointer group">
-              <span className="text-white/40 font-black tracking-widest text-xl sm:text-2xl group-hover:text-cyan-400 transition-colors">
-                {sponsor}
-              </span>
-            </div>
-          ))}
+        <div className="marquee-track flex w-max">
+          {/* Track 1 */}
+          <div className="flex shrink-0 items-center">
+            {OFFICIAL_SPONSORS.map((sponsor, idx) => (
+              <div key={idx} className="mx-8 sm:mx-16 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 hover:border-cyan-400/50 transition-colors cursor-pointer group">
+                <span className="text-white/40 font-black tracking-widest text-xl sm:text-2xl group-hover:text-cyan-400 transition-colors">
+                  {sponsor}
+                </span>
+              </div>
+            ))}
+          </div>
+          {/* Track 2 (Clone for seamless looping) */}
+          <div className="flex shrink-0 items-center" aria-hidden="true">
+            {OFFICIAL_SPONSORS.map((sponsor, idx) => (
+              <div key={`clone-${idx}`} className="mx-8 sm:mx-16 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 hover:border-cyan-400/50 transition-colors cursor-pointer group">
+                <span className="text-white/40 font-black tracking-widest text-xl sm:text-2xl group-hover:text-cyan-400 transition-colors">
+                  {sponsor}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes marquee {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-100%); }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-        .animate-marquee {
-          animation: marquee 40s linear infinite;
+        .marquee-track {
+          animation: marquee 30s linear infinite;
         }
-        .animate-marquee:hover {
+        .marquee-track:hover {
           animation-play-state: paused;
         }
       `}} />

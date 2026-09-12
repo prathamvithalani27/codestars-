@@ -43,8 +43,8 @@ VALUES
     'published'
   ),
   (
-    'Midnight Hackathon', 
-    '24 hours of coding in the Arena. May the best team win.', 
+    'Code UnCode 2026', 
+    '24 hours of competitive programming in the Arena. May the best team win.', 
     NOW() + INTERVAL '7 days', 
     'Arena Hall', 
     'arena_island', 

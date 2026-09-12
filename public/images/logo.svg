@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Outer star with thick black stroke -->
+  <path d="M100 15 L122 75 L187 75 L135 115 L155 180 L100 142 L45 180 L65 115 L13 75 L78 75 Z" fill="#FFA500" stroke="#000" stroke-width="8" stroke-linejoin="round"/>
+  <!-- Inner thin black stroke -->
+  <path d="M100 28 L118 79 L173 79 L129 113 L146 166 L100 134 L54 166 L71 113 L27 79 L82 79 Z" fill="none" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Text -->
+  <text x="100" y="100" font-family="'Segoe UI', Roboto, Helvetica, sans-serif" font-weight="900" font-size="28" text-anchor="middle" fill="#000">DJS</text>
+  <text x="100" y="128" font-family="'Segoe UI', Roboto, Helvetica, sans-serif" font-weight="900" font-size="21" text-anchor="middle" fill="#000" letter-spacing="1.5">CODESTARS</text>
+</svg>
