@@ -16,24 +16,16 @@ export default async function DashboardPage() {
     redirect('/login')
   }
 
-  // Fetch profile
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-
-  // Fetch all events
-  const { data: allEvents, error: eventsError } = await supabase
-    .from('events')
-    .select('*')
-    .order('date', { ascending: true })
-
-  // Fetch user registrations
-  const { data: registrations } = await supabase
-    .from('registrations')
-    .select('*, events(*)')
-    .eq('user_id', user.id)
+  // Fetch all in parallel for performance
+  const [
+    { data: profile },
+    { data: allEvents, error: eventsError },
+    { data: registrations }
+  ] = await Promise.all([
+    supabase.from('profiles').select('*').eq('id', user.id).single(),
+    supabase.from('events').select('*').order('date', { ascending: true }),
+    supabase.from('registrations').select('*, events(*)').eq('user_id', user.id)
+  ])
 
   const isRegistered = registrations && registrations.length > 0
   const mainRegistration = registrations?.[0]
@@ -65,7 +57,6 @@ export default async function DashboardPage() {
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover object-center md:object-right"
             priority
-            unoptimized
           />
           <div className="absolute inset-0 bg-[#00183b]/10 mix-blend-overlay" />
         </div>
@@ -130,7 +121,7 @@ export default async function DashboardPage() {
               return (
                 <div key={idx} className={`flex flex-col items-center text-center ${isFuture || isFailed ? 'opacity-50 grayscale' : ''}`}>
                   <div className="relative w-24 h-24 mb-4 drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
-                    <Image src={stage.image} alt={stage.name} fill sizes="96px" className="object-contain" unoptimized />
+                    <Image src={stage.image} alt={stage.name} fill sizes="96px" className="object-contain" />
                     
                     {/* Status Badge */}
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2">
@@ -195,7 +186,7 @@ export default async function DashboardPage() {
           ) : (
             <div className="flex-1 flex flex-col">
               <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-6 border border-white/10 group bg-[#0a1e3d]">
-                <Image src={nextStage.image} alt={nextStage.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-contain" unoptimized />
+                <Image src={nextStage.image} alt={nextStage.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-contain" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1e3d] via-transparent to-transparent opacity-30" />
               </div>
               
@@ -316,7 +307,6 @@ export default async function DashboardPage() {
               fill 
               sizes="(max-width: 768px) 100vw, 33vw"
               className="object-contain group-hover:scale-105 transition-transform duration-1000"
-              unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a1e3d] via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">

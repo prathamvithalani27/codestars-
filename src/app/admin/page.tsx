@@ -13,22 +13,18 @@ export default async function AdminDashboard() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
+  // Fetch profile role and main event concurrently for performance
+  const [
+    { data: profile },
+    { data: mainEvent }
+  ] = await Promise.all([
+    supabase.from('profiles').select('role').eq('id', user.id).single(),
+    supabase.from('events').select('*').ilike('title', '%Code UnCode%').single()
+  ])
 
   if (profile?.role !== 'admin') {
     redirect('/dashboard')
   }
-
-  // Find the main event (Code UnCode 2026)
-  const { data: mainEvent } = await supabase
-    .from('events')
-    .select('*')
-    .ilike('title', '%Code UnCode%')
-    .single()
 
   const targetEventId = mainEvent?.id || null
   const EVENT_CAPACITY = 100 // FIXED CAPACITY as requested
