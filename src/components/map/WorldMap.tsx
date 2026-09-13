@@ -254,29 +254,7 @@ export default function WorldMap({ events }: { events: EventData[] }) {
                   </div>
                 </motion.div>
 
-                {/* Special CP Landmarks */}
-                {stage.id === 'contest_arena' && (
-                  <div className="absolute z-10 pointer-events-none hidden md:block" style={{ left: islandX + 300, top: islandY - 150 }}>
-                    <div className="bg-black/90 border border-red-500/30 p-5 rounded-2xl shadow-[0_0_60px_rgba(239,68,68,0.3)]">
-                      <div className="text-red-500 font-mono text-4xl font-black tracking-widest animate-pulse">24:00:00</div>
-                      <div className="text-red-500/50 text-[10px] font-black uppercase tracking-[0.3em] text-center mt-2">MOCK CONTEST TIME REMAINING</div>
-                    </div>
-                  </div>
-                )}
-                {stage.id === 'leaderboard_tower' && (
-                  <div className="absolute z-10 pointer-events-none hidden md:block" style={{ left: islandX - 450, top: islandY - 50 }}>
-                    <div className="bg-black/90 border border-cyan-500/30 p-6 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.2)] font-mono text-sm w-72">
-                      <div className="text-cyan-400 font-black tracking-[0.2em] mb-4 border-b border-cyan-500/30 pb-3 flex items-center justify-between">
-                        <span>LIVE LEADERBOARD</span>
-                        <BarChart2 size={16} />
-                      </div>
-                      <div className="flex justify-between text-white mb-3"><span className="text-zinc-500">01</span><span className="font-bold">TEAM ALPHA</span><span className="text-cyan-400 font-black">982</span></div>
-                      <div className="flex justify-between text-white mb-3"><span className="text-zinc-500">02</span><span className="font-bold">CODE FORCE</span><span className="text-cyan-400 font-black">941</span></div>
-                      <div className="flex justify-between text-white mb-3"><span className="text-zinc-500">03</span><span className="font-bold">BUG SLAYERS</span><span className="text-cyan-400 font-black">913</span></div>
-                      <div className="flex justify-between text-white"><span className="text-zinc-500">04</span><span className="font-bold">BYTE BANDITS</span><span className="text-cyan-400 font-black">887</span></div>
-                    </div>
-                  </div>
-                )}
+
 
                 {/* Event Markers placed in a wide orbit */}
                 {stageEvents.map((event, idx) => {
