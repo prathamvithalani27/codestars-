@@ -61,14 +61,8 @@ export default async function DashboardPage() {
           <div className="absolute inset-0 bg-[#00183b]/10 mix-blend-overlay" />
         </div>
         
-        {/* Hero Quote on far right */}
-        <div className="absolute right-10 top-10 z-20 hidden lg:flex flex-col items-end pointer-events-none text-right">
-          <div className="text-white/80 font-serif italic text-lg leading-snug">
-            &ldquo;SAME CODE.<br/>HIGHER<br/>GROUNDS.&rdquo;
-          </div>
-          <div className="text-cyan-400 text-[10px] font-black tracking-widest mt-2 uppercase">&mdash; DJS CodeStars</div>
-        </div>
-        
+
+
         {/* Hero Content Left */}
         <div className="relative z-20 p-8 md:p-14 flex flex-col justify-center w-full md:w-[65%]">
           <h1 className="text-xs md:text-sm font-black text-cyan-400 tracking-[0.2em] uppercase mb-2">
