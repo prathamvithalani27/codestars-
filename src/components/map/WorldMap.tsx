@@ -67,7 +67,6 @@ function EventMarker({ event, x, y, stage, onClick }: { event: EventData, x: num
       {/* Label */}
       <div className="mt-4 bg-black/80 backdrop-blur-md px-5 py-3 rounded-xl shadow-2xl border border-white/20 pointer-events-none w-max max-w-[240px] flex flex-col items-center transform transition-all group-hover:-translate-y-1">
         <span className="text-sm font-black text-white truncate w-full text-center tracking-tight">{event.title}</span>
-        <span className="text-[10px] text-blue-300 font-bold mt-1 uppercase tracking-widest">{new Date(event.date).toLocaleDateString(undefined, {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'})}</span>
       </div>
     </motion.button>
   )
