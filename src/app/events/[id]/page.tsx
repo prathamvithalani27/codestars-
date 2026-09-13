@@ -39,14 +39,12 @@ export default async function EventRegistrationPage(props: { params: Promise<{ i
 
   const isRegistered = registration?.status === 'registered'
 
-  // 4. Check capacity limit
-  const { count: currentRegistrations } = await supabase
-    .from('registrations')
-    .select('id', { count: 'exact' })
-    .eq('event_id', event.id)
-    .eq('status', 'registered')
+  // 4. Check capacity limit (uses SECURITY DEFINER function to bypass RLS)
+  const { data: countResult } = await supabase
+    .rpc('get_event_registration_count', { p_event_id: event.id })
 
-  const isFull = (currentRegistrations || 0) >= event.capacity
+  const currentRegistrations = countResult || 0
+  const isFull = currentRegistrations >= event.capacity
 
   return (
     <div className="min-h-screen bg-[#023e8a] flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
